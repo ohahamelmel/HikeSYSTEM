@@ -300,6 +300,9 @@ public class dbConnect {
         }
         return generatedId;
     }
+    
+    
+    
 
 
     // Method to hash passwords using SHA-256
@@ -320,5 +323,32 @@ public class dbConnect {
             System.out.println("Error hashing password: " + e.getMessage());
             return null;
         }
+    }
+
+    // ⭐ ADDED METHOD: addRecordAndGetId ⭐
+    // This method inserts a record and returns the auto-generated ID (e.g., for SQLite or MySQL).
+    // It uses PreparedStatement.RETURN_GENERATED_KEYS to retrieve the ID after insertion.
+    public int addRecordAndGetId(String sql, Object... values) {
+        int generatedId = -1; // Default to -1 if insertion fails
+        try (Connection conn = this.connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Set the values in the prepared statement dynamically
+            setPreparedStatementValues(pstmt, values);
+
+            // Execute the update
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                // Retrieve the generated keys (auto-incremented ID)
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1); // Get the first generated key (the ID)
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error inserting record and getting ID: " + e.getMessage());
+        }
+        return generatedId;
     }
 }

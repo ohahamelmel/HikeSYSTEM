@@ -27,7 +27,7 @@ public class main {
         mainLoop: do {
             System.out.println("\n===== MAIN MENU =====");
             System.out.println("Welcome to Baklay Cebu: Online Hiking & Trekking Bookings");
-            System.out.println("1. Login | 2. Register | 3. Exit");
+            System.out.println("1. Login\n2. Register \n3. Exit");
             System.out.print("Enter choice: ");
 
             // --- Menu Choice Input Validation ---
